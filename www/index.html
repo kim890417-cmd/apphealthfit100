@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>건강노트 - 매일 건강 대시보드 & 올인원 계산기</title>
+  <meta name="description" content="BMI, 칼로리, 수분, 영양제 루틴, 알코올 분해까지 한 번에 관리하는 올인원 건강 매니저">
+  
+  <!-- Favicon & Open Graph -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="건강노트 - 매일 건강 대시보드 & 계산기">
+  <meta property="og:description" content="매일 수분·영양제 체크부터 8대 건강 계산기까지 손안에서 관리하세요.">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- 상단 글로벌 앱 헤더 -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <i data-lucide="heart-pulse" class="brand-icon"></i>
+          <span class="brand-name">건강노트</span>
+        </div>
+        <span class="header-date" id="currentDateDisplay">10월 11일 (일)</span>
+      </div>
+      <div class="header-right">
+        <div class="streak-badge" title="연속 건강 기록 달성일">
+          <span class="streak-flame">🔥</span>
+          <span class="streak-count" id="streakCountText">1일</span>
+        </div>
+        <button class="icon-btn" id="btnSettings" title="설정 & 데이터 관리">
+          <i data-lucide="settings"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- 메인 스크롤 콘텐츠 뷰포트 -->
+    <main class="app-content-viewport" id="contentViewport">
+      
+      <!-- ==========================================
+           TAB 1: 홈 대시보드 (Home Dashboard)
+           ========================================== -->
+      <section class="tab-panel active" id="tabHome">
+        
+        <!-- 오늘의 건강 점수 히어로 카드 -->
+        <div class="score-hero-card">
+          <div class="score-visual">
+            <svg class="score-ring" viewBox="0 0 120 120">
+              <circle class="score-ring-bg" cx="60" cy="60" r="50"></circle>
+              <circle class="score-ring-bar" id="scoreRingProgress" cx="60" cy="60" r="50"></circle>
+            </svg>
+            <div class="score-text-wrap">
+              <span class="score-num" id="dailyScoreText">85</span>
+              <span class="score-unit">점</span>
+            </div>
+          </div>
+          <div class="score-info">
+            <div class="score-badge" id="scoreGradeBadge">오늘의 활력 상태: 양호 ✨</div>
+            <h2 class="score-title">오늘도 건강한 하루를 만들고 있어요!</h2>
+            <p class="score-desc" id="scoreSummaryDesc">물 섭취와 아침 영양제를 완료했습니다.</p>
+          </div>
+        </div>
+
+        <!-- 퀵 트래커 1: 수분 섭취 위젯 -->
+        <div class="widget-card water-widget">
+          <div class="widget-header">
+            <div class="widget-title-group">
+              <div class="widget-icon-pill icon-water">
+                <i data-lucide="droplets"></i>
+              </div>
+              <div>
+                <h3 class="widget-title">물 마시기</h3>
+                <span class="widget-sub">목표: <strong id="waterGoalDisplay">2,000</strong>ml</span>
+              </div>
+            </div>
+            <div class="water-current-stat">
+              <span class="water-val" id="waterCurrentDisplay">750</span>
+              <span class="water-unit">ml</span>
+            </div>
+          </div>
+
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="waterProgressBar" style="width: 37%;"></div>
+          </div>
+
+          <div class="water-quick-buttons">
+            <button class="btn btn-water-add" data-amount="250">
+              <i data-lucide="plus"></i> 한 컵 (+250ml)
+            </button>
+            <button class="btn btn-water-add" data-amount="500">
+              <i data-lucide="plus"></i> 텀블러 (+500ml)
+            </button>
+            <button class="btn btn-water-reset" id="btnWaterReset" title="초기화">
+              <i data-lucide="rotate-ccw"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 퀵 트래커 2: 오늘 영양제 & 습관 체크 -->
+        <div class="widget-card routine-preview-widget">
+          <div class="widget-header">
+            <div class="widget-title-group">
+              <div class="widget-icon-pill icon-routine">
+                <i data-lucide="pill"></i>
+              </div>
+              <div>
+                <h3 class="widget-title">오늘의 필수 영양제 &amp; 습관</h3>
+                <span class="widget-sub" id="routineProgressSub">3개 중 1개 완료</span>
+              </div>
+            </div>
+            <button class="text-link-btn" id="btnGoToRoutineTab">전체보기 &gt;</button>
+          </div>
+          
+          <div class="routine-quick-checklist" id="homeRoutineList">
+            <!-- JS 동적 바인딩 -->
+          </div>
+        </div>
+
+        <!-- 퀵 트래커 3: 오늘 체중 & BMI 간편 입력 -->
+        <div class="widget-card weight-quick-widget">
+          <div class="widget-header">
+            <div class="widget-title-group">
+              <div class="widget-icon-pill icon-weight">
+                <i data-lucide="scale"></i>
+              </div>
+              <div>
+                <h3 class="widget-title">체중 기록</h3>
+                <span class="widget-sub">최근: <strong id="lastWeightText">68.5</strong>kg (BMI <span id="lastBmiText">22.4</span>)</span>
+              </div>
+            </div>
+            <button class="btn btn-sm btn-primary" id="btnOpenWeightInput">기록하기</button>
+          </div>
+        </div>
+
+        <!-- 오늘의 건강 꿀팁 카드 -->
+        <div class="widget-card tip-card">
+          <div class="tip-header">
+            <span class="tip-badge">💡 건강노트 알짜 상식</span>
+            <button class="tip-refresh-btn" id="btnRefreshTip" title="다른 팁 보기"><i data-lucide="refresh-cw"></i></button>
+          </div>
+          <h4 class="tip-title" id="dailyTipTitle">식후 1시간 후 마시는 물이 보약인 이유</h4>
+          <p class="tip-body" id="dailyTipBody">식사 직후 찬물을 너무 많이 마시면 위산이 희석되어 소화에 부담을 줄 수 있습니다. 식후 40분~1시간 뒤 미온수를 마시면 원활한 신진대사에 큰 도움이 됩니다.</p>
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           TAB 2: 올인원 계산기 (Calculators Hub)
+           ========================================== -->
+      <section class="tab-panel" id="tabCalculators">
+        <div class="section-title-wrap">
+          <h2 class="page-title">건강 계산기 허브 🧮</h2>
+          <p class="page-sub">과학적 공식과 한국인 기준 데이터로 내 몸 수치를 계산하세요.</p>
+        </div>
+
+        <!-- 계산기 선택 서브 네비게이션 칩 -->
+        <div class="calc-selector-scroll">
+          <button class="calc-chip active" data-calc="bmi"><i data-lucide="activity"></i> BMI &amp; 비만도</button>
+          <button class="calc-chip" data-calc="calorie"><i data-lucide="flame"></i> 칼로리 &amp; TDEE</button>
+          <button class="calc-chip" data-calc="water"><i data-lucide="droplet"></i> 물 권장량</button>
+          <button class="calc-chip" data-calc="protein"><i data-lucide="egg"></i> 단백질 필요량</button>
+          <button class="calc-chip" data-calc="caffeine"><i data-lucide="coffee"></i> 카페인 한계치</button>
+          <button class="calc-chip" data-calc="alcohol"><i data-lucide="wine"></i> 알코올 분해 시계</button>
+          <button class="calc-chip" data-calc="exercise"><i data-lucide="bike"></i> 운동 칼로리</button>
+          <button class="calc-chip" data-calc="supplement"><i data-lucide="shield-plus"></i> 영양제 궁합</button>
+        </div>
+
+        <!-- 1. BMI 계산기 패널 -->
+        <div class="calc-box active" id="calcBoxBmi">
+          <div class="calc-box-header">
+            <h3>BMI 및 표준체중 계산</h3>
+            <p>대한비만학회 한국인 기준에 맞춘 정밀 체질량지수</p>
+          </div>
+          <div class="form-grid">
+            <div class="input-group">
+              <label for="bmiHeight">키 (cm)</label>
+              <input type="number" id="bmiHeight" placeholder="예: 172" inputmode="decimal">
+            </div>
+            <div class="input-group">
+              <label for="bmiWeight">몸무게 (kg)</label>
+              <input type="number" id="bmiWeight" placeholder="예: 68" inputmode="decimal">
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block" id="btnRunBmi">
+            <i data-lucide="calculator"></i> BMI 계산하기
+          </button>
+          <div class="calc-result-area" id="resultBmiArea" style="display: none;">
+            <!-- JS 출력 -->
+          </div>
+        </div>
+
+        <!-- 2. 칼로리 & TDEE 계산기 패널 -->
+        <div class="calc-box" id="calcBoxCalorie">
+          <div class="calc-box-header">
+            <h3>일일 필요 칼로리 (BMR &amp; TDEE)</h3>
+            <p>미플린-세인트지어 공식 기반 기초대사량과 활동대사량</p>
+          </div>
+          <div class="form-grid">
+            <div class="input-group">
+              <label>성별</label>
+              <div class="radio-pill-group">
+                <label class="radio-pill"><input type="radio" name="calGender" value="male" checked><span>남성</span></label>
+                <label class="radio-pill"><input type="radio" name="calGender" value="female"><span>여성</span></label>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="calAge">나이 (세)</label>
+              <input type="number" id="calAge" placeholder="예: 30" inputmode="numeric">
+            </div>
+            <div class="input-group">
+              <label for="calHeight">키 (cm)</label>
+              <input type="number" id="calHeight" placeholder="예: 175" inputmode="decimal">
+            </div>
+            <div class="input-group">
+              <label for="calWeight">체중 (kg)</label>
+              <input type="number" id="calWeight" placeholder="예: 70" inputmode="decimal">
+            </div>
+            <div class="input-group full-col">
+              <label for="calActivity">평소 활동량 수준</label>
+              <select id="calActivity" class="select-input">
+                <option value="1.2">거의 운동 안 함 (좌식 생활)</option>
+                <option value="1.375" selected>가벼운 활동 (주 1~3회 가벼운 운동)</option>
+                <option value="1.55">보통 활동 (주 3~5회 규칙적 운동)</option>
+                <option value="1.725">활동량 많음 (주 6~7회 격한 운동)</option>
+                <option value="1.9">운동선수 / 육체 노동</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block" id="btnRunCalorie">
+            <i data-lucide="calculator"></i> 하루 필요 칼로리 계산하기
+          </button>
+          <div class="calc-result-area" id="resultCalorieArea" style="display: none;"></div>
+        </div>
+
+        <!-- 3. 물 권장량 계산기 패널 -->
+        <div class="calc-box" id="calcBoxWater">
+          <div class="calc-box-header">
+            <h3>나만의 일일 수분 섭취 권장량</h3>
+            <p>체중과 일일 활동 강도를 고려한 최적 수분량</p>
+          </div>
+          <div class="form-grid">
+            <div class="input-group">
+              <label for="calcWaterWeight">체중 (kg)</label>
+              <input type="number" id="calcWaterWeight" placeholder="예: 65" inputmode="decimal">
+            </div>
+            <div class="input-group">
+              <label for="calcWaterActivity">활동 강도</label>
+              <select id="calcWaterActivity" class="select-input">
+                <option value="normal" selected>일반 사무직 / 일상생활</option>
+                <option value="active">땀 흘리는 운동 30분 이상</option>
+                <option value="heavy">야외 활동 / 고강도 트레이닝</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block" id="btnRunWater">
+            <i data-lucide="calculator"></i> 권장 수분량 계산하기
+          </button>
+          <div class="calc-result-area" id="resultWaterArea" style="display: none;"></div>
+        </div>
+
+        <!-- 4. 단백질 필요량 계산기 패널 -->
+        <div class="calc-box" id="calcBoxProtein">
+          <div class="calc-box-header">
+            <h3>목적별 일일 단백질 필요량</h3>
+            <p>다이어트, 근육 증가, 건강 유지 목적에 맞춘 닭가슴살/달걀 환산</p>
+          </div>
+          <div class="form-grid">
+            <div class="input-group">
+              <label for="calcProteinWeight">체중 (kg)</label>
+              <input type="number" id="calcProteinWeight" placeholder="예: 70" inputmode="decimal">
+            </div>
+            <div class="input-group">
+              <label for="calcProteinGoal">관리 목적</label>
+              <select id="calcProteinGoal" class="select-input">
+                <option value="0.9">일반 건강 유지 (체중당 0.9g)</option>
+                <option value="1.2">체중 감량 다이어트 (체중당 1.2g)</option>
+                <option value="1.6" selected>린매스업 / 근비대 (체중당 1.6g)</option>
+                <option value="2.0">강도 높은 보디빌딩 (체중당 2.0g)</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block" id="btnRunProtein">
+            <i data-lucide="calculator"></i> 단백질량 계산하기
+          </button>
+          <div class="calc-result-area" id="resultProteinArea" style="display: none;"></div>
+        </div>
+
+        <!-- 5. 카페인 한계치 계산기 패널 -->
+        <div class="calc-box" id="calcBoxCaffeine">
+          <div class="calc-box-header">
+            <h3>카페인 안전 섭취량 &amp; 음료 계산</h3>
+            <p>식약처 권장 일일 최대치(성인 400mg) 기준 안전 범위</p>
+          </div>
+          <div class="drink-selector-grid">
+            <div class="drink-card" data-caffeine="150" data-name="아메리카노">
+              <span class="drink-emoji">☕</span>
+              <span class="drink-name">아메리카노 (1잔)</span>
+              <span class="drink-mg">약 150mg</span>
+            </div>
+            <div class="drink-card" data-caffeine="70" data-name="믹스커피">
+              <span class="drink-emoji">🧋</span>
+              <span class="drink-name">믹스커피 (1봉)</span>
+              <span class="drink-mg">약 70mg</span>
+            </div>
+            <div class="drink-card" data-caffeine="100" data-name="에너지음료">
+              <span class="drink-emoji">⚡</span>
+              <span class="drink-name">에너지음료 (1캔)</span>
+              <span class="drink-mg">약 100mg</span>
+            </div>
+            <div class="drink-card" data-caffeine="35" data-name="콜라/녹차">
+              <span class="drink-emoji">🥤</span>
+              <span class="drink-name">콜라/녹차 (1캔)</span>
+              <span class="drink-mg">약 35mg</span>
+            </div>
+          </div>
+          <div class="calc-result-area" id="resultCaffeineArea" style="margin-top: 15px;">
+            <p>오늘 마신 음료를 터치하면 실시간 누적 카페인량을 계산합니다.</p>
+          </div>
+        </div>
+
+        <!-- 6. 알코올 분해 시계 패널 -->
+        <div class="calc-box" id="calcBoxAlcohol">
+          <div class="calc-box-header">
+            <h3>위드마크 알코올 완전 분해 계산기</h3>
+            <p>음주 후 내일 아침 출근길 숙취 및 알코올 해소 예상 시간</p>
+          </div>
+          <div class="form-grid">
+            <div class="input-group">
+              <label>성별</label>
+              <div class="radio-pill-group">
+                <label class="radio-pill"><input type="radio" name="alcGender" value="male" checked><span>남성</span></label>
+                <label class="radio-pill"><input type="radio" name="alcGender" value="female"><span>여성</span></label>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="alcWeight">체중 (kg)</label>
+              <input type="number" id="alcWeight" placeholder="예: 72" inputmode="decimal">
+            </div>
+            <div class="input-group">
+              <label for="alcSoju">소주 (잔)</label>
+              <input type="number" id="alcSoju" placeholder="0" min="0" value="0">
+            </div>
+            <div class="input-group">
+              <label for="alcBeer">맥주 500cc (잔)</label>
+              <input type="number" id="alcBeer" placeholder="0" min="0" value="0">
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block" id="btnRunAlcohol">
+            <i data-lucide="clock"></i> 분해 소요 시간 계산
+          </button>
+          <div class="calc-result-area" id="resultAlcoholArea" style="display: none;"></div>
+        </div>
+
+        <!-- 7. 운동 소모 칼로리 패널 -->
+        <div class="calc-box" id="calcBoxExercise">
+          <div class="calc-box-header">
+            <h3>운동별 칼로리 소모량 (MET 공식)</h3>
+            <p>체중과 운동 시간에 따른 정밀 에너지 소모 계산</p>
+          </div>
+          <div class="form-grid">
+            <div class="input-group">
+              <label for="exWeight">체중 (kg)</label>
+              <input type="number" id="exWeight" placeholder="예: 68" inputmode="decimal">
+            </div>
+            <div class="input-group">
+              <label for="exTime">운동 시간 (분)</label>
+              <input type="number" id="exTime" placeholder="예: 45" inputmode="numeric">
+            </div>
+            <div class="input-group full-col">
+              <label for="exType">운동 종목 선택</label>
+              <select id="exType" class="select-input">
+                <option value="3.5">가벼운 걷기 (산책, 시속 4km)</option>
+                <option value="5.0" selected>빠르게 걷기 / 파워워킹</option>
+                <option value="7.0">조깅 / 러닝 (시속 8km)</option>
+                <option value="9.8">고강도 달리기 (시속 10km 이상)</option>
+                <option value="6.0">자전거 타기 (보통 속도)</option>
+                <option value="8.0">수영 (자유형 중급)</option>
+                <option value="5.5">헬스 웨이트 트레이닝</option>
+                <option value="8.5">줄넘기 (분당 100회)</option>
+                <option value="4.0">요가 / 스트레칭</option>
+                <option value="7.5">등산 / 계단 오르기</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block" id="btnRunExercise">
+            <i data-lucide="calculator"></i> 소모 칼로리 계산
+          </button>
+          <div class="calc-result-area" id="resultExerciseArea" style="display: none;"></div>
+        </div>
+
+        <!-- 8. 영양제 궁합 & 섭취 타이밍 체커 -->
+        <div class="calc-box" id="calcBoxSupplement">
+          <div class="calc-box-header">
+            <h3>영양제 궁합 &amp; 복용 타이밍 분석기</h3>
+            <p>복용 중인 영양제를 선택하면 상호작용과 권장 시간대를 알려드립니다.</p>
+          </div>
+          <div class="supp-check-grid" id="suppCheckGrid">
+            <!-- JS에서 동적 체크박스 렌더링 -->
+          </div>
+          <button class="btn btn-primary btn-block" id="btnAnalyzeSupplements">
+            <i data-lucide="sparkles"></i> 영양제 궁합 분석하기
+          </button>
+          <div class="calc-result-area" id="resultSupplementArea" style="display: none;"></div>
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           TAB 3: 영양제 & 습관 루틴 (Routines)
+           ========================================== -->
+      <section class="tab-panel" id="tabRoutine">
+        <div class="section-title-wrap">
+          <h2 class="page-title">건강 루틴 플래너 💊</h2>
+          <p class="page-sub">매일 챙겨야 할 영양제와 건강 습관을 시간대별로 관리하세요.</p>
+        </div>
+
+        <div class="routine-progress-summary-card">
+          <div class="summary-left">
+            <span class="summary-label">오늘의 달성률</span>
+            <span class="summary-percent" id="routineDetailedPercent">67%</span>
+          </div>
+          <div class="summary-bar-container">
+            <div class="summary-bar-fill" id="routineDetailedBar" style="width: 67%;"></div>
+          </div>
+          <button class="btn btn-sm btn-secondary" id="btnAddNewRoutine">
+            <i data-lucide="plus"></i> 새 습관 추가
+          </button>
+        </div>
+
+        <!-- 시간대별 섹션 -->
+        <div class="routine-time-group" id="routineMorningGroup">
+          <h3 class="time-group-title"><span class="time-icon">🌅</span> 아침 (기상 직후 / 식전·식후)</h3>
+          <div class="routine-cards-list" id="listMorningRoutines"></div>
+        </div>
+
+        <div class="routine-time-group" id="routineNoonGroup">
+          <h3 class="time-group-title"><span class="time-icon">☀️</span> 점심 &amp; 오후 (활동 시간대)</h3>
+          <div class="routine-cards-list" id="listNoonRoutines"></div>
+        </div>
+
+        <div class="routine-time-group" id="routineEveningGroup">
+          <h3 class="time-group-title"><span class="time-icon">🌙</span> 저녁 &amp; 취침 전 (회복 시간대)</h3>
+          <div class="routine-cards-list" id="listEveningRoutines"></div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB 4: 체중 & 기록 통계 (Logs & Trends)
+           ========================================== -->
+      <section class="tab-panel" id="tabLogs">
+        <div class="section-title-wrap">
+          <h2 class="page-title">건강 추이 &amp; 기록 📊</h2>
+          <p class="page-sub">체중 변화와 건강 활동 내역을 시각화 그래프로 확인하세요.</p>
+        </div>
+
+        <!-- 체중 추이 캔버스 차트 카드 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div>
+              <h3 class="chart-title">체중 변화 그래프</h3>
+              <span class="chart-sub" id="chartRangeSub">최근 기록 추이</span>
+            </div>
+            <div class="chart-btn-group">
+              <button class="btn btn-xs btn-primary" id="btnChartAddWeight">+ 체중 입력</button>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="weightChartCanvas" width="400" height="200"></canvas>
+          </div>
+        </div>
+
+        <!-- 최근 활동 타임라인 로그 -->
+        <div class="log-timeline-section">
+          <div class="timeline-header">
+            <h3>최근 활동 타임라인</h3>
+            <button class="btn btn-xs btn-secondary" id="btnClearHistory">기록 정리</button>
+          </div>
+          <div class="timeline-list" id="timelineList">
+            <!-- JS 동적 렌더링 -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           TAB 5: 백과 & 퀴즈 (Encyclopedia & Quiz)
+           ========================================== -->
+      <section class="tab-panel" id="tabKnowledge">
+        <div class="section-title-wrap">
+          <h2 class="page-title">건강 백과 &amp; 1분 퀴즈 📚</h2>
+          <p class="page-sub">검증된 핵심 건강 상식과 매일 풀어보는 재미있는 퀴즈</p>
+        </div>
+
+        <!-- 1분 퀴즈 카드 -->
+        <div class="quiz-hero-card">
+          <div class="quiz-badge">🧠 오늘의 1분 건강 상식 퀴즈</div>
+          <h3 class="quiz-question" id="quizQuestionText">Q. 물은 많이 마실수록 무조건 건강에 좋을까요?</h3>
+          <div class="quiz-btn-row">
+            <button class="btn btn-quiz" data-ans="O">⭕ O (그렇다)</button>
+            <button class="btn btn-quiz" data-ans="X">❌ X (아니다)</button>
+          </div>
+          <div class="quiz-explanation" id="quizExplanationArea" style="display: none;">
+            <p id="quizExpText"></p>
+            <button class="btn btn-sm btn-primary" id="btnNextQuiz" style="margin-top: 8px;">다음 퀴즈 풀기</button>
+          </div>
+        </div>
+
+        <!-- 건강노트 알짜 백과사전 가이드 리스트 -->
+        <h3 class="encyclopedia-heading">📖 꼭 알아야 할 건강 가이드</h3>
+        <div class="guide-cards-grid" id="guideCardsGrid">
+          <!-- JS에서 동적 바인딩 -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- 하단 5버튼 플로팅 탭바 (Mobile Bottom Tab Bar) -->
+    <nav class="bottom-nav-bar">
+      <button class="nav-item active" data-tab="tabHome">
+        <i data-lucide="home"></i>
+        <span>홈</span>
+      </button>
+      <button class="nav-item" data-tab="tabCalculators">
+        <i data-lucide="calculator"></i>
+        <span>계산기</span>
+      </button>
+      <button class="nav-item" data-tab="tabRoutine">
+        <i data-lucide="check-circle-2"></i>
+        <span>루틴</span>
+      </button>
+      <button class="nav-item" data-tab="tabLogs">
+        <i data-lucide="line-chart"></i>
+        <span>기록</span>
+      </button>
+      <button class="nav-item" data-tab="tabKnowledge">
+        <i data-lucide="book-open"></i>
+        <span>백과/퀴즈</span>
+      </button>
+    </nav>
+
+    <!-- 모달: 체중 입력 모달 -->
+    <div class="modal-backdrop" id="modalWeight">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>⚖️ 체중 기록하기</h3>
+          <button class="modal-close-btn" id="btnCloseWeightModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group">
+            <label for="inputNewWeight">오늘의 체중 (kg)</label>
+            <input type="number" id="inputNewWeight" placeholder="예: 68.2" step="0.1" inputmode="decimal">
+          </div>
+          <div class="input-group">
+            <label for="inputWeightMemo">한 줄 메모 (선택)</label>
+            <input type="text" id="inputWeightMemo" placeholder="예: 아침 공복 측정">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btnCancelWeightModal">취소</button>
+          <button class="btn btn-primary" id="btnSaveWeight">저장하기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 모달: 새 습관/영양제 추가 모달 -->
+    <div class="modal-backdrop" id="modalAddRoutine">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>💊 새 건강 루틴/영양제 추가</h3>
+          <button class="modal-close-btn" id="btnCloseAddRoutineModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group">
+            <label for="inputRoutineName">루틴 / 영양제 이름</label>
+            <input type="text" id="inputRoutineName" placeholder="예: 비타민C, 유산균, 아침 공복 유산소">
+          </div>
+          <div class="input-group">
+            <label for="selectRoutineTime">시간대 선택</label>
+            <select id="selectRoutineTime" class="select-input">
+              <option value="morning">🌅 아침 (기상 직후 / 식전·식후)</option>
+              <option value="noon">☀️ 점심 &amp; 오후 (활동 시간대)</option>
+              <option value="evening">🌙 저녁 &amp; 취침 전 (회복 시간대)</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="inputRoutineTip">복용 팁 / 메모</label>
+            <input type="text" id="inputRoutineTip" placeholder="예: 식후 즉시 복용 시 흡수율 UP">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btnCancelAddRoutineModal">취소</button>
+          <button class="btn btn-primary" id="btnSaveRoutine">추가하기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 모달: 설정 & 데이터 백업 모달 -->
+    <div class="modal-backdrop" id="modalSettings">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>⚙️ 앱 설정 &amp; 데이터 백업</h3>
+          <button class="modal-close-btn" id="btnCloseSettingsModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="settings-item">
+            <div>
+              <strong>효과음 사운드</strong>
+              <p class="settings-desc">물 마시기, 습관 체크 시 상쾌한 효과음</p>
+            </div>
+            <button class="toggle-btn active" id="btnToggleSound">ON</button>
+          </div>
+          <hr class="modal-divider">
+          <div class="settings-item">
+            <div>
+              <strong>데이터 백업 및 초기화</strong>
+              <p class="settings-desc">체중 및 습관 기록 데이터 관리</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-xs btn-secondary" id="btnExportData">내보내기</button>
+              <button class="btn btn-xs btn-danger" id="btnResetAllData">초기화</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "healthfit-app",
+  "version": "1.0.0",
+  "description": "건강노트 - 매일 건강 대시보드 & 올인원 계산기 모바일 앱",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Vanilla mobile web build complete'",
+    "sync": "cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0"
+  }
+}
