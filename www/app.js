@@ -71,22 +71,38 @@ const ENCYCLOPEDIA_GUIDES = [
   {
     tag: "혈압/혈관",
     title: "혈압 단계별 수치와 DASH 식단 가이드",
-    snippet: "수축기 120~129는 혈압 상승기입니다. 나트륨을 줄이고 칼륨(바나나, 시금치)을 늘리는 DASH 식단으로 초기 혈압을 약물 없이 잡는 법."
+    snippet: "수축기 120~129는 혈압 상승기입니다. 나트륨을 줄이고 칼륨(바나나, 시금치)을 늘리는 DASH 식단으로 초기 혈압을 약물 없이 잡는 법.",
+    link: "https://healthfit100.com/health/blood-pressure-stages-hypertension-diet/"
   },
   {
     tag: "혈당/대사",
     title: "식후 혈당 스파이크 막는 거꾸로 식사법",
-    snippet: "식이섬유(채소) → 단백질(고기/달걀) → 탄수화물(밥) 순서로 섭취하면 인슐린 급증을 막고 지방 축적을 획기적으로 방지합니다."
+    snippet: "식이섬유(채소) → 단백질(고기/달걀) → 탄수화물(밥) 순서로 섭취하면 인슐린 급증을 막고 지방 축적을 획기적으로 방지합니다.",
+    link: "https://healthfit100.com/health/blood-sugar-spike-prevention-diet/"
   },
   {
     tag: "영양제",
-    title: "비타민·미네랄 최적의 복용 시간표",
-    snippet: "비타민B/C는 오전 활력 충전, 오메가3/루테인은 점심 식후, 마그네슘은 저녁 숙면 유도 등 시간대별 궁합을 정리했습니다."
+    title: "비타민D 복용시간과 하루 권장량, 마그네슘 결합",
+    snippet: "한국인 80%가 겪는 비타민D 결핍. 지용성 흡수율을 높이는 점심 식후 복용법과 마그네슘 결합 시너지를 정리했습니다.",
+    link: "https://healthfit100.com/health/vitamin-d-benefits-daily-intake-timing/"
   },
   {
     tag: "간 건강",
-    title: "지방간 개선과 밀크씨슬(실리마린)의 진실",
-    snippet: "단순히 보조제에 의존하기보다 정제 탄수화물(과당, 빵, 면)을 줄이고 간세포 활성화를 돕는 항산화 식단 실천이 핵심입니다."
+    title: "간수치 AST ALT 정상 수치와 해석, 낮추는 법",
+    snippet: "건강검진 간수치 40 IU/L 이하 유지법과 지방간, 음주, 약물로 인한 간 피로를 낮추는 식습관 가이드.",
+    link: "https://healthfit100.com/health/liver-enzymes-ast-alt-guide/"
+  },
+  {
+    tag: "체지방/다이어트",
+    title: "체지방 1kg 빼는 칼로리와 현실적인 감량 식단",
+    snippet: "체지방 1kg 감량에 필요한 7,700kcal 적자 공식과 요요 없는 하루 500kcal 적자 식단 계산법.",
+    link: "https://healthfit100.com/health/body-fat-loss-calorie-deficit-calculator/"
+  },
+  {
+    tag: "콜레스테롤",
+    title: "LDL 콜레스테롤 식단｜달걀보다 포화지방 줄이기",
+    snippet: "음식의 콜레스테롤 수치보다 포화지방(삼겹살, 버터, 가공육)을 줄여야 간에서 생성되는 나쁜 LDL을 잡을 수 있습니다.",
+    link: "https://healthfit100.com/health/ldl-cholesterol-diet-saturated-fat/"
   }
 ];
 
@@ -916,15 +932,36 @@ function renderEncyclopedia() {
   if (!grid) return;
   grid.innerHTML = '';
   ENCYCLOPEDIA_GUIDES.forEach(g => {
-    const card = document.createElement('div');
+    const card = document.createElement('a');
     card.className = 'guide-card-item';
+    card.href = g.link;
+    card.target = '_blank';
+    card.rel = 'noopener noreferrer';
+    card.style.textDecoration = 'none';
+    card.style.display = 'block';
+    card.style.color = 'inherit';
     card.innerHTML = `
-      <span class="guide-card-tag">${g.tag}</span>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <span class="guide-card-tag">${g.tag}</span>
+        <span style="font-size:0.75rem; color:#0284c7; font-weight:700;">칼럼 원문 보기 &gt;</span>
+      </div>
       <h4 class="guide-card-title">${g.title}</h4>
       <p class="guide-card-snippet">${g.snippet}</p>
     `;
     grid.appendChild(card);
   });
+
+  // Big Link to healthfit100.com/blog
+  const blogLinkCard = document.createElement('div');
+  blogLinkCard.style.cssText = 'margin-top:14px; text-align:center; padding:18px 16px; background:#e0f2fe; border-radius:14px; border:1px solid #bae6fd;';
+  blogLinkCard.innerHTML = `
+    <h4 style="font-size:0.96rem; font-weight:800; color:#0369a1; margin-bottom:4px;">📰 건강노트 전체 칼럼 보러가기</h4>
+    <p style="font-size:0.8rem; color:#0284c7; margin-bottom:12px;">healthfit100.com 에서 수십 편의 전문 건강 가이드를 만나보세요.</p>
+    <a href="https://healthfit100.com/blog" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary" style="text-decoration:none; display:inline-flex;">
+      건강노트 블로그 바로가기 &gt;
+    </a>
+  `;
+  grid.appendChild(blogLinkCard);
 }
 
 // ==========================================
