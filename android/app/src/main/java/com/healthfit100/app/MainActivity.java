@@ -1,4 +1,4 @@
-package com.healthfit.app;
+package com.healthfit100.app;
 
 import com.getcapacitor.BridgeActivity;
 

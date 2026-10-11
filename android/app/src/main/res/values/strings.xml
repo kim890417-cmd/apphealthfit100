@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">건강노트</string>
     <string name="title_activity_main">건강노트</string>
-    <string name="package_name">com.healthfit.app</string>
-    <string name="custom_url_scheme">com.healthfit.app</string>
+    <string name="package_name">com.healthfit100.app</string>
+    <string name="custom_url_scheme">com.healthfit100.app</string>
 </resources>
