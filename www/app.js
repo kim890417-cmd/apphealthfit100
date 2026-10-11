@@ -542,19 +542,76 @@ function renderTimeline() {
 // ==========================================
 
 function initCalculators() {
-  // Calculator Tab Switching
-  const chips = document.querySelectorAll('.calc-chip');
-  chips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      chips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      const calcName = chip.getAttribute('data-calc');
-      document.querySelectorAll('.calc-box').forEach(b => b.classList.remove('active'));
-      const target = document.getElementById('calcBox' + calcName.charAt(0).toUpperCase() + calcName.slice(1));
-      if (target) target.classList.add('active');
-      if (window.lucide) window.lucide.createIcons();
+  // 1. Category Filtering
+  const filterBtns = document.querySelectorAll('.calc-filter-btn');
+  const hubCards = document.querySelectorAll('.calc-hub-card');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.getAttribute('data-filter');
+      hubCards.forEach(card => {
+        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      playWaterSound();
     });
   });
+
+  // 2. Bottom Sheet Modal Opening / Closing
+  const backdrop = document.getElementById('calcModalBackdrop');
+  const btnClose = document.getElementById('btnModalClose');
+  const btnBack = document.getElementById('btnModalBack');
+  const categoryLabel = document.getElementById('modalCategoryLabel');
+
+  const CATEGORY_NAMES = {
+    diet: '🔥 체형·다이어트',
+    vital: '⚡ 일상·활력',
+    life: '🍷 라이프·건강'
+  };
+
+  function openCalc(calcName, category) {
+    if (!backdrop) return;
+    document.querySelectorAll('.calc-box').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById('calcBox' + calcName.charAt(0).toUpperCase() + calcName.slice(1));
+    if (target) {
+      target.classList.add('active');
+    }
+    if (categoryLabel && category) {
+      categoryLabel.textContent = CATEGORY_NAMES[category] || '스마트 계산기';
+    }
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    playWaterSound();
+    if (window.lucide) window.lucide.createIcons();
+    const scrollContent = document.querySelector('.modal-scroll-content');
+    if (scrollContent) scrollContent.scrollTop = 0;
+  }
+
+  function closeCalc() {
+    if (!backdrop) return;
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  hubCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const calcName = card.getAttribute('data-calc');
+      const category = card.getAttribute('data-category');
+      openCalc(calcName, category);
+    });
+  });
+
+  if (btnClose) btnClose.addEventListener('click', closeCalc);
+  if (btnBack) btnBack.addEventListener('click', closeCalc);
+  if (backdrop) {
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) closeCalc();
+    });
+  }
 
   // 1. BMI Calculation
   const btnBmi = document.getElementById('btnRunBmi');

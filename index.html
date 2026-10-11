@@ -158,24 +158,182 @@
            ========================================== -->
       <section class="tab-panel" id="tabCalculators">
         <div class="section-title-wrap">
-          <h2 class="page-title">건강 계산기 허브 🧮</h2>
-          <p class="page-sub">과학적 공식과 한국인 기준 데이터로 내 몸 수치를 계산하세요.</p>
+          <div class="hub-header-row">
+            <div>
+              <h2 class="page-title">건강 계산기 허브 🧮</h2>
+              <p class="page-sub">내 몸 수치를 진단하는 8가지 스마트 도구</p>
+            </div>
+            <span class="hub-count-badge"><i data-lucide="sparkles"></i> 8종 도구</span>
+          </div>
         </div>
 
-        <!-- 계산기 선택 서브 네비게이션 칩 -->
-        <div class="calc-selector-scroll">
-          <button class="calc-chip active" data-calc="bmi"><i data-lucide="activity"></i> BMI &amp; 비만도</button>
-          <button class="calc-chip" data-calc="calorie"><i data-lucide="flame"></i> 칼로리 &amp; TDEE</button>
-          <button class="calc-chip" data-calc="water"><i data-lucide="droplet"></i> 물 권장량</button>
-          <button class="calc-chip" data-calc="protein"><i data-lucide="egg"></i> 단백질 필요량</button>
-          <button class="calc-chip" data-calc="caffeine"><i data-lucide="coffee"></i> 카페인 한계치</button>
-          <button class="calc-chip" data-calc="alcohol"><i data-lucide="wine"></i> 알코올 분해 시계</button>
-          <button class="calc-chip" data-calc="exercise"><i data-lucide="bike"></i> 운동 칼로리</button>
-          <button class="calc-chip" data-calc="supplement"><i data-lucide="shield-plus"></i> 영양제 궁합</button>
+        <!-- 카테고리 필터 바 -->
+        <div class="calc-filter-bar">
+          <button class="calc-filter-btn active" data-filter="all">전체 (8)</button>
+          <button class="calc-filter-btn" data-filter="diet">🔥 체형·다이어트</button>
+          <button class="calc-filter-btn" data-filter="vital">⚡ 일상·활력</button>
+          <button class="calc-filter-btn" data-filter="life">🍷 라이프·건강</button>
         </div>
 
-        <!-- 1. BMI 계산기 패널 -->
-        <div class="calc-box active" id="calcBoxBmi">
+        <!-- 2열 비주얼 카드 허브 그리드 -->
+        <div class="calc-hub-grid" id="calcHubGrid">
+          <!-- 1. BMI -->
+          <div class="calc-hub-card theme-sky" data-calc="bmi" data-category="diet">
+            <div class="card-badge-row">
+              <span class="hub-tag">한국인 기준</span>
+              <i data-lucide="arrow-up-right" class="card-arrow-icon"></i>
+            </div>
+            <div class="card-icon-box">
+              <i data-lucide="activity"></i>
+            </div>
+            <h3 class="card-title">BMI &amp; 비만도</h3>
+            <p class="card-desc">대한비만학회 정밀 체질량지수 및 표준체중</p>
+            <div class="card-action-bar">
+              <span>측정하기</span>
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </div>
+
+          <!-- 2. Calorie & TDEE -->
+          <div class="calc-hub-card theme-orange" data-calc="calorie" data-category="diet">
+            <div class="card-badge-row">
+              <span class="hub-tag">인기 🔥</span>
+              <i data-lucide="arrow-up-right" class="card-arrow-icon"></i>
+            </div>
+            <div class="card-icon-box">
+              <i data-lucide="flame"></i>
+            </div>
+            <h3 class="card-title">칼로리 &amp; TDEE</h3>
+            <p class="card-desc">기초대사량과 감량/유지 하루 권장 열량</p>
+            <div class="card-action-bar">
+              <span>측정하기</span>
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </div>
+
+          <!-- 3. Water -->
+          <div class="calc-hub-card theme-cyan" data-calc="water" data-category="vital">
+            <div class="card-badge-row">
+              <span class="hub-tag">기본 💧</span>
+              <i data-lucide="arrow-up-right" class="card-arrow-icon"></i>
+            </div>
+            <div class="card-icon-box">
+              <i data-lucide="droplet"></i>
+            </div>
+            <h3 class="card-title">물 권장량</h3>
+            <p class="card-desc">체중과 일일 활동 강도 맞춤 수분량</p>
+            <div class="card-action-bar">
+              <span>측정하기</span>
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </div>
+
+          <!-- 4. Protein -->
+          <div class="calc-hub-card theme-emerald" data-calc="protein" data-category="diet">
+            <div class="card-badge-row">
+              <span class="hub-tag">식단 🥩</span>
+              <i data-lucide="arrow-up-right" class="card-arrow-icon"></i>
+            </div>
+            <div class="card-icon-box">
+              <i data-lucide="egg"></i>
+            </div>
+            <h3 class="card-title">단백질 필요량</h3>
+            <p class="card-desc">목적별 단백질량과 닭가슴살·달걀 환산</p>
+            <div class="card-action-bar">
+              <span>측정하기</span>
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </div>
+
+          <!-- 5. Caffeine -->
+          <div class="calc-hub-card theme-amber" data-calc="caffeine" data-category="vital">
+            <div class="card-badge-row">
+              <span class="hub-tag">숙면 ☕</span>
+              <i data-lucide="arrow-up-right" class="card-arrow-icon"></i>
+            </div>
+            <div class="card-icon-box">
+              <i data-lucide="coffee"></i>
+            </div>
+            <h3 class="card-title">카페인 안심 시계</h3>
+            <p class="card-desc">식약처 400mg 기준 음료 누적 &amp; 컷오프</p>
+            <div class="card-action-bar">
+              <span>측정하기</span>
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </div>
+
+          <!-- 6. Alcohol -->
+          <div class="calc-hub-card theme-rose" data-calc="alcohol" data-category="life">
+            <div class="card-badge-row">
+              <span class="hub-tag">숙취 🍺</span>
+              <i data-lucide="arrow-up-right" class="card-arrow-icon"></i>
+            </div>
+            <div class="card-icon-box">
+              <i data-lucide="wine"></i>
+            </div>
+            <h3 class="card-title">알코올 분해 시계</h3>
+            <p class="card-desc">위드마크 공식 기반 소주·맥주 완전 해독</p>
+            <div class="card-action-bar">
+              <span>측정하기</span>
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </div>
+
+          <!-- 7. Exercise -->
+          <div class="calc-hub-card theme-violet" data-calc="exercise" data-category="life">
+            <div class="card-badge-row">
+              <span class="hub-tag">MET 공식</span>
+              <i data-lucide="arrow-up-right" class="card-arrow-icon"></i>
+            </div>
+            <div class="card-icon-box">
+              <i data-lucide="bike"></i>
+            </div>
+            <h3 class="card-title">운동 칼로리</h3>
+            <p class="card-desc">10가지 종목별 체중 맞춤 실제 소비량</p>
+            <div class="card-action-bar">
+              <span>측정하기</span>
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </div>
+
+          <!-- 8. Supplement -->
+          <div class="calc-hub-card theme-indigo" data-calc="supplement" data-category="vital">
+            <div class="card-badge-row">
+              <span class="hub-tag">안전 💊</span>
+              <i data-lucide="arrow-up-right" class="card-arrow-icon"></i>
+            </div>
+            <div class="card-icon-box">
+              <i data-lucide="shield-plus"></i>
+            </div>
+            <h3 class="card-title">영양제 궁합</h3>
+            <p class="card-desc">함께 먹으면 안 되는 조합과 권장 복용 시간</p>
+            <div class="card-action-bar">
+              <span>측정하기</span>
+              <i data-lucide="chevron-right"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             바텀시트 계산기 모달 (Bottom Sheet Modal)
+             ========================================== -->
+        <div class="calc-modal-backdrop" id="calcModalBackdrop">
+          <div class="calc-modal-sheet" id="calcModalSheet">
+            <div class="modal-handle-bar"></div>
+            
+            <div class="modal-nav-header">
+              <button class="btn-modal-back" id="btnModalBack" type="button">
+                <i data-lucide="arrow-left"></i> 목록으로
+              </button>
+              <span class="modal-category-label" id="modalCategoryLabel">체형·다이어트</span>
+              <button class="btn-modal-close" id="btnModalClose" type="button" aria-label="닫기">
+                <i data-lucide="x"></i>
+              </button>
+            </div>
+
+            <div class="modal-scroll-content">
+              <!-- 1. BMI 계산기 패널 -->
+              <div class="calc-box active" id="calcBoxBmi">
           <div class="calc-box-header">
             <h3>BMI 및 표준체중 계산</h3>
             <p>대한비만학회 한국인 기준에 맞춘 정밀 체질량지수</p>
@@ -411,6 +569,10 @@
           </button>
           <div class="calc-result-area" id="resultSupplementArea" style="display: none;"></div>
         </div>
+
+            </div> <!-- /.modal-scroll-content -->
+          </div> <!-- /.calc-modal-sheet -->
+        </div> <!-- /.calc-modal-backdrop -->
 
       </section>
 

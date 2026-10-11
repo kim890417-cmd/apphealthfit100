@@ -552,49 +552,385 @@ body {
   margin-bottom: 14px;
 }
 
-.calc-selector-scroll {
+/* ==========================================================================
+   Tab 2: Calculators Hub (Revamped 2-Column Grid & Bottom Sheet Modal)
+   ========================================================================== */
+
+.hub-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hub-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.hub-count-badge i {
+  width: 14px;
+  height: 14px;
+}
+
+/* Category Filter Bar */
+.calc-filter-bar {
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding-bottom: 8px;
-  margin-bottom: 14px;
+  padding-bottom: 6px;
+  margin-bottom: 16px;
   -webkit-overflow-scrolling: touch;
 }
 
-.calc-selector-scroll::-webkit-scrollbar {
+.calc-filter-bar::-webkit-scrollbar {
   display: none;
 }
 
-.calc-chip {
+.calc-filter-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   background: white;
-  border: 1px solid var(--border-color);
+  border: 1.5px solid var(--border-color);
   color: var(--text-sub);
   padding: 8px 14px;
   border-radius: var(--radius-full);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
 }
 
-.calc-chip.active {
-  background: var(--primary);
+.calc-filter-btn:active {
+  transform: scale(0.96);
+}
+
+.calc-filter-btn.active {
+  background: var(--text-main);
   color: white;
-  border-color: var(--primary);
-  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);
+  border-color: var(--text-main);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
 }
 
+/* 2-Column Visual Card Hub Grid */
+.calc-hub-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.calc-hub-card {
+  background: white;
+  border: 1.5px solid var(--border-color);
+  border-radius: 20px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 156px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.calc-hub-card:active {
+  transform: scale(0.96);
+}
+
+.calc-hub-card.hidden {
+  display: none !important;
+}
+
+/* Card Badge Row */
+.card-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.hub-tag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 6px;
+  letter-spacing: -0.2px;
+}
+
+.card-arrow-icon {
+  width: 16px;
+  height: 16px;
+  color: #94a3b8;
+  transition: transform 0.2s;
+}
+
+.calc-hub-card:hover .card-arrow-icon,
+.calc-hub-card:active .card-arrow-icon {
+  transform: translate(2px, -2px);
+  color: var(--primary);
+}
+
+/* Icon Box */
+.card-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  transition: transform 0.2s;
+}
+
+.card-icon-box i {
+  width: 22px;
+  height: 22px;
+}
+
+.calc-hub-card:hover .card-icon-box {
+  transform: scale(1.08);
+}
+
+/* Card Title & Desc */
+.card-title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.25;
+  margin-bottom: 4px;
+  letter-spacing: -0.3px;
+}
+
+.card-desc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 10px;
+  flex: 1;
+}
+
+/* Card Action Bar */
+.card-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #0284c7;
+  border-top: 1px dashed #f1f5f9;
+  padding-top: 8px;
+}
+
+.card-action-bar i {
+  width: 14px;
+  height: 14px;
+}
+
+/* Theme Colors */
+.theme-sky {
+  border-color: #bae6fd;
+}
+.theme-sky .hub-tag { background: #e0f2fe; color: #0284c7; }
+.theme-sky .card-icon-box { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); color: #0284c7; }
+.theme-sky .card-action-bar { color: #0284c7; }
+
+.theme-orange {
+  border-color: #fed7aa;
+}
+.theme-orange .hub-tag { background: #ffedd5; color: #ea580c; }
+.theme-orange .card-icon-box { background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%); color: #ea580c; }
+.theme-orange .card-action-bar { color: #ea580c; }
+
+.theme-cyan {
+  border-color: #a5f3fc;
+}
+.theme-cyan .hub-tag { background: #cffafe; color: #0891b2; }
+.theme-cyan .card-icon-box { background: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%); color: #0891b2; }
+.theme-cyan .card-action-bar { color: #0891b2; }
+
+.theme-emerald {
+  border-color: #a7f3d0;
+}
+.theme-emerald .hub-tag { background: #d1fae5; color: #059669; }
+.theme-emerald .card-icon-box { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #059669; }
+.theme-emerald .card-action-bar { color: #059669; }
+
+.theme-amber {
+  border-color: #fde68a;
+}
+.theme-amber .hub-tag { background: #fef3c7; color: #d97706; }
+.theme-amber .card-icon-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #d97706; }
+.theme-amber .card-action-bar { color: #d97706; }
+
+.theme-rose {
+  border-color: #fecdd3;
+}
+.theme-rose .hub-tag { background: #ffe4e6; color: #e11d48; }
+.theme-rose .card-icon-box { background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%); color: #e11d48; }
+.theme-rose .card-action-bar { color: #e11d48; }
+
+.theme-violet {
+  border-color: #ddd6fe;
+}
+.theme-violet .hub-tag { background: #ede9fe; color: #7c3aed; }
+.theme-violet .card-icon-box { background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%); color: #7c3aed; }
+.theme-violet .card-action-bar { color: #7c3aed; }
+
+.theme-indigo {
+  border-color: #c7d2fe;
+}
+.theme-indigo .hub-tag { background: #e0e7ff; color: #4f46e5; }
+.theme-indigo .card-icon-box { background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); color: #4f46e5; }
+.theme-indigo .card-action-bar { color: #4f46e5; }
+
+/* ==========================================================================
+   Bottom Sheet Modal System for Calculators
+   ========================================================================== */
+
+.calc-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
+.calc-modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.calc-modal-sheet {
+  background: white;
+  width: 100%;
+  max-width: 480px;
+  max-height: 88vh;
+  border-radius: 28px 28px 0 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
+  transform: translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+  overflow: hidden;
+}
+
+.calc-modal-backdrop.open .calc-modal-sheet {
+  transform: translateY(0);
+}
+
+.modal-handle-bar {
+  width: 38px;
+  height: 4px;
+  background: #cbd5e1;
+  border-radius: 4px;
+  margin: 12px auto 6px;
+  flex-shrink: 0;
+}
+
+.modal-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px 14px;
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+.btn-modal-back {
+  background: var(--bg-app);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-modal-back:active {
+  background: #e2e8f0;
+}
+
+.btn-modal-back i {
+  width: 15px;
+  height: 15px;
+}
+
+.modal-category-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.btn-modal-close {
+  background: var(--bg-app);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-modal-close:hover,
+.btn-modal-close:active {
+  background: #e2e8f0;
+  color: var(--text-main);
+}
+
+.btn-modal-close i {
+  width: 18px;
+  height: 18px;
+}
+
+.modal-scroll-content {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 18px 18px 30px;
+  flex: 1;
+}
+
+/* Individual Calc Box inside Modal */
 .calc-box {
   display: none;
-  background: white;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 20px 16px;
-  box-shadow: var(--shadow-sm);
   animation: fadeIn 0.25s ease-out;
 }
 
@@ -603,21 +939,23 @@ body {
 }
 
 .calc-box-header {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
   border-bottom: 1px solid var(--border-light);
-  padding-bottom: 12px;
 }
 
 .calc-box-header h3 {
-  font-size: 1.08rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: var(--text-main);
   margin-bottom: 4px;
+  letter-spacing: -0.3px;
 }
 
 .calc-box-header p {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
+  line-height: 1.4;
 }
 
 /* Forms */
