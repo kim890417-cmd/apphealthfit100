@@ -109,6 +109,8 @@ const ENCYCLOPEDIA_GUIDES = [
 let appState = {
   waterCurrent: 0,
   waterGoal: 2000,
+  waterCupAmount: 250,
+  waterBottleAmount: 500,
   routines: JSON.parse(JSON.stringify(DEFAULT_ROUTINES)),
   weights: [
     { date: '10/05', weight: 69.2, memo: '초기 측정', bmi: 22.8 },
@@ -1056,10 +1058,46 @@ function setupEventListeners() {
     });
   }
 
-  // Water Quick Add
+  // Editable water portions are stored separately from today's intake.
+  const waterPortions = [
+    { id: 'waterCupAmount', key: 'waterCupAmount', label: 'waterCupLabel', fallback: 250 },
+    { id: 'waterBottleAmount', key: 'waterBottleAmount', label: 'waterBottleLabel', fallback: 500 }
+  ];
+  const validWaterAmount = amount => Number.isInteger(amount) && amount >= 1 && amount <= 3000;
+  waterPortions.forEach(portion => {
+    const input = document.getElementById(portion.id);
+    if (!input) return;
+    const stored = Number(appState[portion.key]);
+    input.value = validWaterAmount(stored) ? stored : portion.fallback;
+    const updateLabel = () => {
+      const amount = Number(input.value);
+      input.setCustomValidity(validWaterAmount(amount) ? '' : '1~3,000ml 사이의 정수를 입력해 주세요.');
+      document.getElementById(portion.label).textContent = validWaterAmount(amount) ? `${amount.toLocaleString()}ml 추가` : '용량 입력 후 추가';
+      return amount;
+    };
+    updateLabel();
+    input.addEventListener('input', updateLabel);
+    input.addEventListener('change', () => {
+      const amount = updateLabel();
+      if (validWaterAmount(amount)) {
+        appState[portion.key] = amount;
+        saveState();
+      }
+    });
+  });
   document.querySelectorAll('.btn-water-add').forEach(btn => {
     btn.addEventListener('click', () => {
-      const amt = parseInt(btn.getAttribute('data-amount'));
+      const input = document.getElementById(btn.dataset.amountInput);
+      const amt = Number(input.value);
+      if (!validWaterAmount(amt)) {
+        input.setCustomValidity('1~3,000ml 사이의 정수를 입력해 주세요.');
+        input.reportValidity();
+        input.focus();
+        return;
+      }
+      input.setCustomValidity('');
+      const portion = waterPortions.find(item => item.id === input.id);
+      appState[portion.key] = amt;
       appState.waterCurrent += amt;
       playWaterSound();
       addTimelineLog('💧', `물 ${amt}ml 섭취`, `현재 누적 ${appState.waterCurrent}ml`);
