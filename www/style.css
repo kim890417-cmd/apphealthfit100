@@ -1713,3 +1713,6 @@ body {
 
 .bottom-nav-bar .nav-item:hover { background: #eef6ff; }
 .bottom-nav-bar .nav-item:focus-visible { outline: 2px solid var(--primary); outline-offset: -3px; }
+
+.site-read-button { display: block; margin-top: 12px; padding: 12px; border-radius: 10px; background: #e0f2fe; color: #0369a1; font-weight: 700; text-align: center; text-decoration: none; line-height: 1.5; }
+.site-library-link { margin-bottom: 12px; background: #0369a1; color: white; }

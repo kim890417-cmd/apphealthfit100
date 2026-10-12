@@ -71,37 +71,37 @@ const ENCYCLOPEDIA_GUIDES = [
   {
     tag: "혈압/혈관",
     title: "혈압 단계별 수치와 DASH 식단 가이드",
-    snippet: "수축기 120~129는 혈압 상승기입니다. 나트륨을 줄이고 칼륨(바나나, 시금치)을 늘리는 DASH 식단으로 초기 혈압을 약물 없이 잡는 법.",
+    snippet: "혈압 수치의 구분과 식생활 관리 시 확인할 내용을 사이트에서 읽어보세요.",
     link: "https://healthfit100.com/health/blood-pressure-stages-hypertension-diet/"
   },
   {
     tag: "혈당/대사",
     title: "식후 혈당 스파이크 막는 거꾸로 식사법",
-    snippet: "식이섬유(채소) → 단백질(고기/달걀) → 탄수화물(밥) 순서로 섭취하면 인슐린 급증을 막고 지방 축적을 획기적으로 방지합니다.",
+    snippet: "식사 순서와 식후 혈당 관리에 관한 전체 글을 사이트에서 확인하세요.",
     link: "https://healthfit100.com/health/blood-sugar-spike-prevention-diet/"
   },
   {
     tag: "영양제",
     title: "비타민D 복용시간과 하루 권장량, 마그네슘 결합",
-    snippet: "한국인 80%가 겪는 비타민D 결핍. 지용성 흡수율을 높이는 점심 식후 복용법과 마그네슘 결합 시너지를 정리했습니다.",
+    snippet: "비타민D 섭취와 복용 시 확인할 내용을 사이트에서 읽어보세요.",
     link: "https://healthfit100.com/health/vitamin-d-benefits-daily-intake-timing/"
   },
   {
     tag: "간 건강",
     title: "간수치 AST ALT 정상 수치와 해석, 낮추는 법",
-    snippet: "건강검진 간수치 40 IU/L 이하 유지법과 지방간, 음주, 약물로 인한 간 피로를 낮추는 식습관 가이드.",
+    snippet: "건강검진 간수치를 이해할 때 참고할 내용을 사이트에서 확인하세요.",
     link: "https://healthfit100.com/health/liver-enzymes-ast-alt-guide/"
   },
   {
     tag: "체지방/다이어트",
     title: "체지방 1kg 빼는 칼로리와 현실적인 감량 식단",
-    snippet: "체지방 1kg 감량에 필요한 7,700kcal 적자 공식과 요요 없는 하루 500kcal 적자 식단 계산법.",
+    snippet: "체중 관리와 섭취 열량에 관한 전체 글을 사이트에서 읽어보세요.",
     link: "https://healthfit100.com/health/body-fat-loss-calorie-deficit-calculator/"
   },
   {
     tag: "콜레스테롤",
     title: "LDL 콜레스테롤 식단｜달걀보다 포화지방 줄이기",
-    snippet: "음식의 콜레스테롤 수치보다 포화지방(삼겹살, 버터, 가공육)을 줄여야 간에서 생성되는 나쁜 LDL을 잡을 수 있습니다.",
+    snippet: "콜레스테롤과 식생활 관리에 관한 전체 글을 사이트에서 확인하세요.",
     link: "https://healthfit100.com/health/ldl-cholesterol-diet-saturated-fat/"
   }
 ];
@@ -973,6 +973,13 @@ function renderQuiz() {
       if (isCorrect) playChimeSound();
       expArea.style.display = 'block';
       expText.innerHTML = `<strong>${isCorrect ? '정답입니다! 🎉' : '아쉽네요! 💡'}</strong><br>${quiz.exp}`;
+      const article = document.createElement('a');
+      article.href = 'https://healthfit100.com/blog';
+      article.target = '_blank';
+      article.rel = 'noopener noreferrer';
+      article.className = 'site-read-button';
+      article.textContent = '사이트에서 건강 관련 글 더 읽기 ↗';
+      expText.appendChild(article);
     };
   });
 
@@ -1002,10 +1009,10 @@ function renderEncyclopedia() {
     card.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
         <span class="guide-card-tag">${g.tag}</span>
-        <span style="font-size:0.75rem; color:#0284c7; font-weight:700;">칼럼 원문 보기 &gt;</span>
+        <span style="font-size:0.75rem; color:#0284c7; font-weight:700;">사이트에서 읽기 ↗</span>
       </div>
       <h4 class="guide-card-title">${g.title}</h4>
-      <p class="guide-card-snippet">${g.snippet}</p>
+      <p class="guide-card-snippet">${g.snippet}</p><span class="site-read-button">healthfit100.com에서 전체 글 읽기 ↗</span>
     `;
     grid.appendChild(card);
   });
@@ -1015,7 +1022,7 @@ function renderEncyclopedia() {
   blogLinkCard.style.cssText = 'margin-top:14px; text-align:center; padding:18px 16px; background:#e0f2fe; border-radius:14px; border:1px solid #bae6fd;';
   blogLinkCard.innerHTML = `
     <h4 style="font-size:0.96rem; font-weight:800; color:#0369a1; margin-bottom:4px;">📰 건강노트 전체 칼럼 보러가기</h4>
-    <p style="font-size:0.8rem; color:#0284c7; margin-bottom:12px;">healthfit100.com 에서 수십 편의 전문 건강 가이드를 만나보세요.</p>
+    <p style="font-size:0.8rem; color:#0284c7; margin-bottom:12px;">새 글과 수정된 본문은 healthfit100.com에서 확인하세요.</p>
     <a href="https://healthfit100.com/blog" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary" style="text-decoration:none; display:inline-flex;">
       건강노트 블로그 바로가기 &gt;
     </a>
