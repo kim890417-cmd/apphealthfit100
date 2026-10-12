@@ -1573,6 +1573,11 @@ body {
 }
 
 .nav-item {
+  flex: 1 1 0;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 56px;
+  touch-action: manipulation;
   background: none;
   border: none;
   display: flex;
@@ -1589,7 +1594,8 @@ body {
   font-family: inherit;
 }
 
-.nav-item i {
+.nav-item i,
+.nav-item svg {
   width: 22px;
   height: 22px;
   stroke-width: 2.2;
@@ -1597,7 +1603,7 @@ body {
 
 .nav-item.active {
   color: var(--primary);
-  transform: translateY(-2px);
+  background: var(--primary-light);
 }
 
 /* ==========================================================================
@@ -1704,3 +1710,6 @@ body {
   border-top: 1px solid var(--border-color);
   margin: 12px 0;
 }
+
+.bottom-nav-bar .nav-item:hover { background: #eef6ff; }
+.bottom-nav-bar .nav-item:focus-visible { outline: 2px solid var(--primary); outline-offset: -3px; }

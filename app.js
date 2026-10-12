@@ -333,7 +333,7 @@ function renderHomeDashboard() {
     if (progressSub) progressSub.innerText = `${total}개 중 ${done}개 완료`;
   }
 
-  if (window.lucide) window.lucide.createIcons();
+  refreshIcons();
 }
 
 function getTimeTagText(time) {
@@ -415,7 +415,7 @@ function renderRoutinesTab() {
   if (pctEl) pctEl.innerText = `${pct}%`;
   if (barEl) barEl.style.width = `${pct}%`;
 
-  if (window.lucide) window.lucide.createIcons();
+  refreshIcons();
 }
 
 // ==========================================
@@ -588,7 +588,7 @@ function initCalculators() {
     backdrop.classList.add('open');
     document.body.style.overflow = 'hidden';
     playWaterSound();
-    if (window.lucide) window.lucide.createIcons();
+    refreshIcons();
     const scrollContent = document.querySelector('.modal-scroll-content');
     if (scrollContent) scrollContent.scrollTop = 0;
   }
@@ -1042,11 +1042,12 @@ function setupEventListeners() {
       if (targetPanel) {
         targetPanel.classList.add('active');
         document.getElementById('contentViewport').scrollTop = 0;
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
         if (targetId === 'tabLogs') {
           setTimeout(renderWeightChart, 50);
         }
       }
-      if (window.lucide) window.lucide.createIcons();
+      refreshIcons();
     });
   });
 
@@ -1276,6 +1277,14 @@ function setupEventListeners() {
 // ==========================================
 // 10. App Initialization
 // ==========================================
+function refreshIcons() {
+  try {
+    if (window.lucide) window.lucide.createIcons();
+  } catch (error) {
+    console.warn('Icon rendering failed; controls remain available.', error);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   loadState();
 
@@ -1287,13 +1296,17 @@ document.addEventListener('DOMContentLoaded', () => {
     dateEl.innerText = `${d.getMonth() + 1}월 ${d.getDate()}일 (${days[d.getDay()]})`;
   }
 
-  renderHomeDashboard();
-  renderRoutinesTab();
-  initCalculators();
-  renderQuiz();
-  renderEncyclopedia();
-  renderTimeline();
+  // Wire controls before optional panels render: a panel failure must not
+  // prevent water buttons, navigation, or settings from receiving clicks.
   setupEventListeners();
+  [renderHomeDashboard, renderRoutinesTab, initCalculators,
+    renderQuiz, renderEncyclopedia, renderTimeline].forEach(initialize => {
+    try {
+      initialize();
+    } catch (error) {
+      console.error(`Panel initialization failed: ${initialize.name}`, error);
+    }
+  });
 
-  if (window.lucide) window.lucide.createIcons();
+  refreshIcons();
 });
