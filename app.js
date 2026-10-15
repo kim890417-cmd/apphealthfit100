@@ -1317,3 +1317,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
   refreshIcons();
 });
+
+// Android Back Button Handler
+window.handleAndroidBack = function() {
+  // 1. 바텀시트 계산기 모달 열려있으면 닫기
+  const calcBackdrop = document.getElementById('calcModalBackdrop');
+  if (calcBackdrop && calcBackdrop.classList.contains('open')) {
+    calcBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    return true;
+  }
+
+  // 2. 체중 기록 모달 열려있으면 닫기
+  const modalWeight = document.getElementById('modalWeight');
+  if (modalWeight && modalWeight.classList.contains('active')) {
+    modalWeight.classList.remove('active');
+    document.body.style.overflow = '';
+    return true;
+  }
+
+  // 3. 루틴 추가 모달 열려있으면 닫기
+  const modalAddRoutine = document.getElementById('modalAddRoutine');
+  if (modalAddRoutine && modalAddRoutine.classList.contains('active')) {
+    modalAddRoutine.classList.remove('active');
+    document.body.style.overflow = '';
+    return true;
+  }
+
+  // 4. 설정 모달 열려있으면 닫기
+  const modalSettings = document.getElementById('modalSettings');
+  if (modalSettings && modalSettings.classList.contains('active')) {
+    modalSettings.classList.remove('active');
+    document.body.style.overflow = '';
+    return true;
+  }
+
+  // 5. 홈 탭(tabHome)이 아닌 다른 탭에 있으면 홈 탭으로 복귀
+  const homePanel = document.getElementById('tabHome');
+  if (homePanel && !homePanel.classList.contains('active')) {
+    const homeNav = document.querySelector('.bottom-nav-bar .nav-item[data-tab="tabHome"]');
+    if (homeNav) {
+      homeNav.click();
+      return true;
+    }
+  }
+
+  // 홈 탭이고 열린 모달이 없으면 네이티브 뒤로가기(종료 확인 토스트 -> 2번째 클릭 시 종료)로 넘김
+  return false;
+};
+
+if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+  window.Capacitor.Plugins.App.addListener('backButton', () => {
+    window.handleAndroidBack();
+  });
+}
